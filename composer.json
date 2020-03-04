@@ -14,7 +14,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Lianhua\\SuperCSV": "src/"
+            "Lianhua\\SuperCSV\\": "src/"
         }
     },
     "minimum-stability": "stable",
