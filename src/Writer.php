@@ -29,19 +29,16 @@ class Reader
 
     /**
      * @brief Open CSV file
-     * @param $file File path
+     * @param string $file File path
+     * @param bool $overwrite Truncate file
      */
-    public function openFile(string $file)
+    public function openFile(string $file, bool $overwrite)
     {
-        if (!file_exists($file)) {
-            throw new \Exception("File not found: " . $file, 1);
-        }
-
         if ($this->file !== null) {
             fclose($this->file);
         }
 
-        $this->file = fopen($file, "r");
+        $this->file = fopen($file, $overwrite ? "w" : "a");
 
         if ($this->file === null) {
             throw new \Exception("Unable to open: " . $file, 2);
@@ -124,9 +121,15 @@ class Reader
     /**
      * @brief Loads the header
      */
-    public function getHeader()
+    public function setHeader(array $header)
     {
-        $this->header = $this->read();
+        $detected = [];
+
+        foreach ($header as $key => $value) {
+
+        }
+
+        $this->header = $header;
     }
 
     /**
@@ -198,7 +201,8 @@ class Reader
         string $enclosure = "\"",
         string $escaper = "\\",
         bool $ignoreEmpty = false,
-        bool $trim = false
+        bool $trim = false,
+        bool $overwrite = false
     ) {
         $this->file = null;
         $this->header = null;
@@ -209,7 +213,7 @@ class Reader
         $this->trim = $trim;
 
         if ($file !== null) {
-            $this->openFile($file);
+            $this->openFile($file, $overwrite);
         }
     }
 
