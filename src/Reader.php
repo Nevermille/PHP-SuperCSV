@@ -187,26 +187,24 @@ class Reader
 
     /**
      * @brief Constructor
-     * @param $file CSV file path
-     * @param $delimiter The delimiter
-     * @param $enclosure The enclosure
-     * @param $escaper The escaper
+     * @param string $file CSV file path
+     * @param string $delimiter The delimiter
+     * @param string $enclosure The enclosure
+     * @param string $escaper The escaper
      */
     public function __construct(
         string $file = null,
         string $delimiter = ",",
         string $enclosure = "\"",
-        string $escaper = "\\",
-        bool $ignoreEmpty = false,
-        bool $trim = false
+        string $escaper = "\\"
     ) {
         $this->file = null;
         $this->header = null;
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;
         $this->escaper = $escaper;
-        $this->ignoreEmpty = $ignoreEmpty;
-        $this->trim = $trim;
+        $this->ignoreEmpty = false;
+        $this->trim = false;
 
         if ($file !== null) {
             $this->openFile($file);
