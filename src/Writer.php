@@ -1,4 +1,6 @@
-<?php namespace Lianhua\SuperCSV;
+<?php
+
+namespace Lianhua\SuperCSV;
 
 /*
 SuperCSV Library

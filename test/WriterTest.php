@@ -1,7 +1,6 @@
-<?php namespace Lianhua\Test;
+<?php
 
-use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\InvalidArgumentException;
+namespace Lianhua\Test;
 
 /*
 SuperCSV Library

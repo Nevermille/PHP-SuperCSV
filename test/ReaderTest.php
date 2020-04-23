@@ -1,4 +1,6 @@
-<?php namespace Lianhua\Test;
+<?php
+
+namespace Lianhua\Test;
 
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\InvalidArgumentException;
