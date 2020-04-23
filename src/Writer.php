@@ -1,38 +1,84 @@
 <?php namespace Lianhua\SuperCSV;
 
+/*
+SuperCSV Library
+Copyright (C) 2020  Lianhua Studio
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 /**
- * @file Reader.php
+ * @file Writer.php
  * @author Camille Nevermind
  */
 
 /**
- * @class Reader
+ * @class Writer
  * @package Lianhua\SuperCSV
- * @brief Reader class
+ * @brief Writer class
  */
-class Reader
+class Writer
 {
-    /** @brief Delimiter (, by default) */
+    /**
+     * @brief Delimiter (, by default)
+     * @var string
+     */
     private $delimiter;
-    /** @brief Enclosure (" by default) */
+
+    /**
+     * @brief Enclosure (" by default)
+     * @var string
+     */
     private $enclosure;
-    /** @brief Escaper (\ by default) */
+
+    /**
+     * @brief Escaper (\ by default)
+     * @var string
+     */
     private $escaper;
-    /** @brief CSV file handler */
+
+    /**
+     * @brief CSV file handler
+     * @var resource
+     */
     private $file;
-    /** @brief Loaded header */
+
+    /**
+     * @brief Loaded header
+     * @var array
+     */
     private $header;
-    /** @brief Skip empty records parameter */
+
+    /**
+     * @brief Skip empty records parameter
+     * @var bool
+     */
     private $ignoreEmpty;
-    /** @brief Trim parameter */
+
+    /**
+     * @brief Trim parameter
+     * @var bool
+     */
     private $trim;
 
     /**
      * @brief Open CSV file
      * @param string $file File path
      * @param bool $overwrite Truncate file
+     * @return void
      */
-    public function openFile(string $file, bool $overwrite)
+    private function openFile(string $file, bool $overwrite): void
     {
         if ($this->file !== null) {
             fclose($this->file);
@@ -83,26 +129,18 @@ class Reader
 
     /**
      * @brief Read the next line
-     * @return array|null Fields read, with assoc if a header has been read
+     * @return void
      */
-    public function read(): ?array
+    public function write(array $data): void
     {
-        $res = fgetcsv($this->file, 0, $this->delimiter, $this->enclosure, $this->escaper);
-
-        if ($res === false) {
-            return null;
-        }
-
-        if ($res[0] === null) {
-            return $this->read();
-        }
+        $res = $data;
 
         if ($this->trim) {
-            $res = array_map("trim", $res);
+            $res = array_map("trim", $data);
         }
 
         if ($this->ignoreEmpty && $this->isEmpty($res)) {
-            return $this->read();
+            return;
         }
 
         if ($this->header !== null) {
@@ -112,60 +150,45 @@ class Reader
                 $assoc[$this->header[$key]] = $value;
             }
 
-            return $assoc;
+            fputcsv($this->file, $assoc, $this->delimiter, $this->enclosure, $this->escaper);
+        } else {
+            fputcsv($this->file, $res, $this->delimiter, $this->enclosure, $this->escaper);
         }
-
-        return $res;
     }
 
     /**
      * @brief Loads the header
+     * @return void
      */
-    public function setHeader(array $header)
+    public function setHeader(array $header): void
     {
-        $detected = [];
+        $this->header = [];
 
         foreach ($header as $key => $value) {
-
+            $this->header[$value] = $key;
         }
 
-        $this->header = $header;
+        rewind($this->file);
+        fputcsv($this->file, $header, $this->delimiter, $this->enclosure, $this->escaper);
     }
 
     /**
      * @brief Returns the whole CSV (beware of memory consumption!)
-     * @return array All data from CSV file, with assoc if a header has been read
+     * @return void
      */
-    public function fetchAll(): array
+    public function writeAll(array $datas): void
     {
-        $res = [];
-
-        while ($row = $this->read()) {
-            $res[] = $row;
-        }
-
-        $this->rewind();
-
-        return $res;
-    }
-
-    /**
-     * @brief Rewinds the CSV (the header will automatically reload)
-     */
-    public function rewind(): void
-    {
-        rewind($this->file);
-
-        if ($this->header !== null) {
-            $this->getHeader();
+        foreach ($datas as $data) {
+            $this->write($data);
         }
     }
 
     /**
      * @brief Sets the delimiter
      * @param string $delimiter The delimiter
+     * @return void
      */
-    public function setDelimiter(string $delimiter)
+    public function setDelimiter(string $delimiter): void
     {
         $this->delimiter = $delimiter;
     }
@@ -173,8 +196,9 @@ class Reader
     /**
      * @brief Sets the enclosure
      * @param string $enclosure The enclosure
+     * @return void
      */
-    public function setEnclosure(string $enclosure)
+    public function setEnclosure(string $enclosure): void
     {
         $this->enclosure = $enclosure;
     }
@@ -182,8 +206,9 @@ class Reader
     /**
      * @brief Sets the escaper
      * @param string $escaper The escaper
+     * @return void
      */
-    public function setEscaper(string $escaper)
+    public function setEscaper(string $escaper): void
     {
         $this->escaper = $escaper;
     }
@@ -197,20 +222,16 @@ class Reader
      */
     public function __construct(
         string $file = null,
+        bool $overwrite,
         string $delimiter = ",",
         string $enclosure = "\"",
-        string $escaper = "\\",
-        bool $ignoreEmpty = false,
-        bool $trim = false,
-        bool $overwrite = false
+        string $escaper = "\\"
     ) {
         $this->file = null;
         $this->header = null;
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;
         $this->escaper = $escaper;
-        $this->ignoreEmpty = $ignoreEmpty;
-        $this->trim = $trim;
 
         if ($file !== null) {
             $this->openFile($file, $overwrite);

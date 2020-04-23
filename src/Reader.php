@@ -1,5 +1,23 @@
 <?php namespace Lianhua\SuperCSV;
 
+/*
+SuperCSV Library
+Copyright (C) 2020  Lianhua Studio
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 /**
  * @file Reader.php
  * @author Camille Nevermind
@@ -12,26 +30,54 @@
  */
 class Reader
 {
-    /** @brief Delimiter (, by default) */
+    /**
+     * @brief Delimiter (, by default)
+     * @var string
+     */
     private $delimiter;
-    /** @brief Enclosure (" by default) */
+
+    /**
+     * @brief Enclosure (" by default)
+     * @var string
+     */
     private $enclosure;
-    /** @brief Escaper (\ by default) */
+
+    /**
+     * @brief Escaper (\ by default)
+     * @var string
+     */
     private $escaper;
-    /** @brief CSV file handler */
+
+    /**
+     * @brief CSV file handler
+     * @var resource
+     */
     private $file;
-    /** @brief Loaded header */
+
+    /**
+     * @brief Loaded header
+     * @var array
+     */
     private $header;
-    /** @brief Skip empty records parameter */
+
+    /**
+     * @brief Skip empty records parameter
+     * @var bool
+     */
     private $ignoreEmpty;
-    /** @brief Trim parameter */
+
+    /**
+     * @brief Trim parameter
+     * @var bool
+     */
     private $trim;
 
     /**
      * @brief Open CSV file
      * @param $file File path
+     * @return void
      */
-    public function openFile(string $file)
+    private function openFile(string $file): void
     {
         if (!file_exists($file)) {
             throw new \Exception("File not found: " . $file, 1);
@@ -123,8 +169,9 @@ class Reader
 
     /**
      * @brief Loads the header
+     * @return void
      */
-    public function getHeader()
+    public function getHeader(): void
     {
         $this->header = $this->read();
     }
@@ -148,6 +195,7 @@ class Reader
 
     /**
      * @brief Rewinds the CSV (the header will automatically reload)
+     * @return void
      */
     public function rewind(): void
     {
@@ -161,8 +209,9 @@ class Reader
     /**
      * @brief Sets the delimiter
      * @param string $delimiter The delimiter
+     * @return void
      */
-    public function setDelimiter(string $delimiter)
+    public function setDelimiter(string $delimiter): void
     {
         $this->delimiter = $delimiter;
     }
@@ -170,8 +219,9 @@ class Reader
     /**
      * @brief Sets the enclosure
      * @param string $enclosure The enclosure
+     * @return void
      */
-    public function setEnclosure(string $enclosure)
+    public function setEnclosure(string $enclosure): void
     {
         $this->enclosure = $enclosure;
     }
@@ -179,8 +229,9 @@ class Reader
     /**
      * @brief Sets the escaper
      * @param string $escaper The escaper
+     * @return void
      */
-    public function setEscaper(string $escaper)
+    public function setEscaper(string $escaper): void
     {
         $this->escaper = $escaper;
     }
@@ -191,6 +242,7 @@ class Reader
      * @param string $delimiter The delimiter
      * @param string $enclosure The enclosure
      * @param string $escaper The escaper
+     * @return void
      */
     public function __construct(
         string $file = null,
@@ -213,6 +265,7 @@ class Reader
 
     /**
      * @brief Destructor
+     * @return void
      */
     public function __destruct()
     {
