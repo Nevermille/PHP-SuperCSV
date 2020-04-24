@@ -6,7 +6,7 @@
         "phpunit/phpunit": "^9",
         "squizlabs/php_codesniffer": "^3.5"
     },
-    "license": "GPL-3",
+    "license": "GPL-3.0",
     "authors": [
         {
             "name": "Camille Nevermind",
