@@ -182,7 +182,7 @@ class Reader
      * @brief Returns the whole CSV (beware of memory consumption!)
      * @return array All data from CSV file, with assoc if a header has been read
      */
-    public function fetchAll(): array
+    public function readAll(): array
     {
         $res = [];
 

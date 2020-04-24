@@ -224,7 +224,7 @@ class Writer
      */
     public function __construct(
         string $file = null,
-        bool $overwrite,
+        bool $overwrite = true,
         string $delimiter = ",",
         string $enclosure = "\"",
         string $escaper = "\\"

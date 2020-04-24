@@ -111,7 +111,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     public function testReadAll(): void
     {
         $reader = new \Lianhua\SuperCSV\Reader(__DIR__ . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "01.csv");
-        $data = $reader->fetchAll();
+        $data = $reader->readAll();
 
         $this->assertIsArray($data);
         $this->assertCount(2, $data);
